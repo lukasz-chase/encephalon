@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+
+@layer components {
+  .link {
+    @apply border px-5 py-3 rounded-lg border-light-accent hover:bg-light-accent transition-all w-96 text-center;
+  }
+  .flexCenter {
+    @apply flex items-center justify-center;
+  }
+  .infoText {
+    @apply p-4 bg-light-accent/50 rounded-lg max-w-[300px];
+  }
+  .chatRow {
+    @apply rounded-lg px-5 py-3 text-sm flex items-center justify-center
+    space-x-2 hover:bg-gray-700/70 cursor-pointer text-gray-300 transition-all duration-200 ease-out;
+  }
+}
