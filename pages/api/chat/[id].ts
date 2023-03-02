@@ -9,6 +9,9 @@ export default async function handler(
   if (req.method === "GET") {
     try {
       const data = await prisma.chat.findMany({
+        where: {
+          userId: req.query.id,
+        },
         orderBy: {
           createdAt: "desc",
         },

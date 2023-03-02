@@ -1,9 +1,9 @@
 export type Message = {
-  id: String;
+  id?: String;
   text: String;
   author: String;
   chatId: String;
-  createdAt: string;
+  createdAt?: string;
 };
 
 export type Chat = {

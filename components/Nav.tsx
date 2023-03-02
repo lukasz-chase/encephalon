@@ -27,7 +27,7 @@ const Nav = () => {
         ) : (
           <li
             className="bg-light-accent px-5 rounded-lg cursor-pointer"
-            onClick={() => signIn("google")}
+            onClick={() => signIn("google", undefined, { prompt: "login" })}
           >
             SIGN IN
           </li>

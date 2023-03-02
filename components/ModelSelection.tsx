@@ -1,26 +1,33 @@
 "use client";
+import { Dispatch, SetStateAction } from "react";
 import Select from "react-select";
 
-const fetchModels = () => fetch("/api/getEngines").then((res) => res.json());
+const models = [
+  { value: "gpt-3.5-turbo", label: "gpt-3.5-turbo" },
+  { value: "gpt-3.5-turbo-0301", label: "gpt-3.5-turbo-0301" },
+  { value: "text-davinci-003", label: "text-davinci-003" },
+  { value: "text-davinci-002", label: "text-davinci-002" },
+  { value: "code-davinci-002", label: "code-davinci-002" },
+];
 
-const ModelSelection = () => {
-  // const { data: models, isLoading } = useSWR("models", fetchModels);
-  // const { data: model, mutate: setModel } = useSWR("model", {
-  //   fallbackData: "text-davinci-003",
-  // });
+type ModelSelectionTypes = {
+  model: string;
+  setModel: Dispatch<SetStateAction<string>>;
+};
+
+const ModelSelection = ({ model, setModel }: ModelSelectionTypes) => {
   return (
     <div className="mt-2">
-      {/* <Select
+      <Select
         className="mt-2"
         defaultValue={model}
         isSearchable
-        isLoading={isLoading}
         menuPosition="fixed"
         classNames={{ control: (state) => "bg-[#434654] border-[#434654]" }}
         placeholder={model}
-        onChange={(e) => setModel(e.value)}
-        options={models?.modelOptions}
-      /> */}
+        onChange={(e) => setModel(e?.valueOf!)}
+        options={models}
+      />
     </div>
   );
 };

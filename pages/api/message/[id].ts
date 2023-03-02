@@ -9,9 +9,12 @@ export default async function handler(
 ) {
   if (req.method === "GET") {
     try {
-      const data = await prisma.message.findUnique({
+      const data = await prisma.message.findMany({
         where: {
-          id: req.query.id,
+          chatId: req.query.id,
+        },
+        orderBy: {
+          createdAt: "desc",
         },
       });
       res.status(200).json(data);

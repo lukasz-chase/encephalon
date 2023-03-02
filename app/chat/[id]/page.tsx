@@ -1,5 +1,6 @@
 import Chat from "@/components/Chat";
 import ChatInput from "@/components/ChatInput";
+import ChatLayout from "@/components/ChatLayout";
 
 type Props = {
   params: {
@@ -9,10 +10,12 @@ type Props = {
 
 const ChatPage = ({ params: { id } }: Props) => {
   return (
-    <div className="flex flex-col h-screen overflow-hidden">
-      <Chat chatId={id} />
-      <ChatInput chatId={id} />
-    </div>
+    <ChatLayout>
+      <div className="flex flex-col h-full overflow-hidden">
+        <Chat chatId={id} />
+        <ChatInput chatId={id} />
+      </div>
+    </ChatLayout>
   );
 };
 
