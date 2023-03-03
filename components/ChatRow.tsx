@@ -1,9 +1,8 @@
 "use client";
-import { fetchMessage } from "@/api";
+import { fetchMessages } from "@/api";
 import { Message } from "@/types/Chat";
 import { ChatBubbleLeftIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { useQuery } from "@tanstack/react-query";
-import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -15,7 +14,6 @@ type Props = {
 function ChatRow({ id }: Props) {
   const pathname = usePathname();
   const router = useRouter();
-  const { data: session } = useSession();
   const [active, setActive] = useState(false);
 
   useEffect(() => {
@@ -28,7 +26,7 @@ function ChatRow({ id }: Props) {
   };
 
   const { data: messages, isLoading } = useQuery<Message[]>({
-    queryFn: () => fetchMessage(id),
+    queryFn: () => fetchMessages(id),
     queryKey: ["message"],
   });
   return (

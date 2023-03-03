@@ -2,7 +2,7 @@
 import { Dispatch, SetStateAction } from "react";
 import Select from "react-select";
 
-const models = [
+const options = [
   { value: "gpt-3.5-turbo", label: "gpt-3.5-turbo" },
   { value: "gpt-3.5-turbo-0301", label: "gpt-3.5-turbo-0301" },
   { value: "text-davinci-003", label: "text-davinci-003" },
@@ -25,8 +25,8 @@ const ModelSelection = ({ model, setModel }: ModelSelectionTypes) => {
         menuPosition="fixed"
         classNames={{ control: (state) => "bg-[#434654] border-[#434654]" }}
         placeholder={model}
-        onChange={(e) => setModel(e?.valueOf!)}
-        options={models}
+        onChange={(e) => setModel(e.value)}
+        options={options}
       />
     </div>
   );

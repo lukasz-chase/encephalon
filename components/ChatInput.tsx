@@ -14,11 +14,24 @@ type Props = {
   chatId: string;
 };
 
+type updatedMessage = {
+  id?: String;
+  text: String;
+  author: String;
+  chatId: String;
+  createdAt?: string;
+  temperature: number;
+  topP: number;
+  frequencyPenalty: number;
+  presencePenalty: number;
+  model: string;
+};
+
 function ChatInput({ chatId }: Props) {
   const [prompt, setPrompt] = useState("");
   const { data: session } = useSession();
   const queryClient = useQueryClient();
-  const [model, setModel] = useState('gpt-3.5-turbo"');
+  const [model, setModel] = useState("gpt-3.5-turbo");
   const [parameters, setParameters] = useState({
     temperature: 0.5,
     topP: 1,
@@ -40,20 +53,47 @@ function ChatInput({ chatId }: Props) {
       },
     }
   );
+  const { mutate: sendToChat } = useMutation(
+    async (message: updatedMessage) =>
+      await axios.post("/api/message/askQuestion", message),
+    {
+      onSuccess: (data: any) => {
+        queryClient.invalidateQueries(["messages"]);
+        setPrompt("");
+      },
+      onError: (error) => {
+        if (error instanceof AxiosError) {
+          toast.error(error?.response?.data.message);
+        }
+      },
+    }
+  );
   const sendMessage = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!prompt) return;
     const input = prompt.trim();
-    const message: Message = {
+    const myMessage: Message = {
       text: input,
       author: session?.user?.email!,
       chatId: chatId,
     };
+    const chatMessage: updatedMessage = {
+      text: input,
+      author: session?.user?.email!,
+      chatId: chatId,
+      temperature: parameters.temperature,
+      topP: parameters.topP,
+      frequencyPenalty: parameters.frequencyPenalty,
+      presencePenalty: parameters.presencePenalty,
+      model,
+    };
     toast.loading("ChatGPT is thinking...");
-    mutate(message);
+    mutate(myMessage);
+    sendToChat(chatMessage);
   };
   const handleParameters = (e: ChangeEvent<HTMLInputElement>) =>
-    setParameters({ ...parameters, [e.target.name]: e.target.valueAsNumber });
+    setParameters({ ...parameters, [e.target.name]: e.target.value });
+
   return (
     <div className="bg-gray-700/50 text-gray-400 rounded-lg text-sm">
       <div>
@@ -63,6 +103,7 @@ function ChatInput({ chatId }: Props) {
             key={input.id}
             {...input}
             handleParameters={handleParameters}
+            parameters={parameters}
           />
         ))}
       </div>

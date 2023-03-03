@@ -1,4 +1,4 @@
-import opeani from "./chatgpt";
+import openai from "./chatgpt";
 
 type queryTypes = {
   prompt: string;
@@ -17,21 +17,30 @@ const query = async ({
   presencePenalty,
   topP,
 }: queryTypes) => {
-  const res = await opeani
+  const res = await openai
     .createCompletion({
       model,
       prompt,
-      temperature: temperature,
+      temperature: 0.5,
       max_tokens: 1000,
-      top_p: topP,
-      frequency_penalty: frequencyPenalty,
-      presence_penalty: presencePenalty,
+      top_p: 1,
+      frequency_penalty: 0,
+      presence_penalty: 0,
     })
+    // .createCompletion({
+    //   model,
+    //   prompt,
+    //   temperature: temperature,
+    //   max_tokens: 1000,
+    //   top_p: topP,
+    //   frequency_penalty: frequencyPenalty,
+    //   presence_penalty: presencePenalty,
+    // })
     .then((res: any) => res.data.choices[0].text)
-    .catch(
-      (err: any) =>
-        `ChatGPT was unable to find an answer for that! (Error: ${err.message})`
-    );
+    .catch((err: any) => {
+      console.log(err);
+      return `ChatGPT was unable to find an answer for that! (Error: ${err.message})`;
+    });
 
   return res;
 };

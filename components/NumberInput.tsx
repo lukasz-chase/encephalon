@@ -8,6 +8,12 @@ type NumberInputTypes = {
   min: number;
   name: string;
   handleParameters: (e: ChangeEvent<HTMLInputElement>) => void;
+  parameters: {
+    temperature: number;
+    topP: number;
+    frequencyPenalty: number;
+    presencePenalty: number;
+  };
 };
 
 const NumberInput = ({
@@ -17,6 +23,7 @@ const NumberInput = ({
   min,
   name,
   handleParameters,
+  parameters,
 }: NumberInputTypes) => {
   return (
     <div>
@@ -24,10 +31,11 @@ const NumberInput = ({
       <input
         id={id}
         type="number"
+        name={name}
         max={max}
         min={min}
         step="0.1"
-        value={name}
+        value={parameters[name]}
         onChange={handleParameters}
       />
     </div>

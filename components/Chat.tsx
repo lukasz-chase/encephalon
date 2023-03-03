@@ -28,7 +28,7 @@ function Chat({ chatId }: Props) {
         </>
       )}
       {messages?.map((message) => (
-        <Message key={message.id} message={message} />
+        <Message key={message.id} {...message} />
       ))}
     </div>
   );
