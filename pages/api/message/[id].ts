@@ -14,7 +14,7 @@ export default async function handler(
           chatId: req.query.id,
         },
         orderBy: {
-          createdAt: "desc",
+          createdAt: "asc",
         },
       });
       res.status(200).json(data);

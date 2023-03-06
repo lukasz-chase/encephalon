@@ -8,10 +8,7 @@ type bodyProps = {
   text: string;
   author: string;
   chatId: string;
-  topP: number;
-  temperature: number;
-  frequencyPenalty: number;
-  presencePenalty: number;
+  avatar: string;
 };
 
 export default async function handler(
@@ -23,7 +20,7 @@ export default async function handler(
     if (!session)
       return res.status(401).json({ message: "You need to be logged in" });
 
-    const { text, author, chatId }: bodyProps = req.body;
+    const { text, author, chatId, avatar }: bodyProps = req.body;
 
     if (!text.length)
       return res
@@ -36,6 +33,7 @@ export default async function handler(
           text,
           author,
           chatId,
+          avatar,
         },
       });
       res.status(200).json(result);

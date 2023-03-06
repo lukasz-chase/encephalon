@@ -25,9 +25,10 @@ export default async function RootLayout({
       <body>
         <SessionProvider session={session}>
           <QueryWrapper>
-            <div className={`flex flex-col ${montserrat.variable} h-screen`}>
+            <div
+              className={`flex flex-col ${montserrat.variable} h-screen font-montserrat`}
+            >
               <Nav />
-
               <div className="flex-1">{children}</div>
             </div>
           </QueryWrapper>

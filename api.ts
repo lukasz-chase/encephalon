@@ -9,3 +9,8 @@ export const fetchMessages = async (id: String) => {
   const response = await axios.get(`/api/message/${id}`);
   return response.data;
 };
+
+export const fetchModels = async () => {
+  const response = await axios.get(`/api/chat/getModels`);
+  return response.data;
+};

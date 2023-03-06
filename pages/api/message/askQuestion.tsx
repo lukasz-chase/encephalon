@@ -34,13 +34,13 @@ export default async function handler(
     presencePenalty,
     topP,
   });
-
   try {
     const result = await prisma.message.create({
       data: {
         text: response || "ChatGPT was unable to find an answer for that!",
         author: "ChatGPT",
         chatId,
+        avatar: "https://links.papareact.com/89k",
       },
     });
     res.status(200).json(result);

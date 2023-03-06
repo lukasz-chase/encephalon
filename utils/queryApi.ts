@@ -21,26 +21,19 @@ const query = async ({
     .createCompletion({
       model,
       prompt,
-      temperature: 0.5,
+      temperature: temperature,
       max_tokens: 1000,
-      top_p: 1,
-      frequency_penalty: 0,
-      presence_penalty: 0,
+      top_p: topP,
+      frequency_penalty: frequencyPenalty,
+      presence_penalty: presencePenalty,
     })
-    // .createCompletion({
-    //   model,
-    //   prompt,
-    //   temperature: temperature,
-    //   max_tokens: 1000,
-    //   top_p: topP,
-    //   frequency_penalty: frequencyPenalty,
-    //   presence_penalty: presencePenalty,
-    // })
-    .then((res: any) => res.data.choices[0].text)
-    .catch((err: any) => {
-      console.log(err);
-      return `ChatGPT was unable to find an answer for that! (Error: ${err.message})`;
-    });
+    .then((res: any) => {
+      return res.data.choices[0].text;
+    })
+    .catch(
+      (err: any) =>
+        `ChatGPT was unable to find an answer for that! (Error: ${err.message})`
+    );
 
   return res;
 };

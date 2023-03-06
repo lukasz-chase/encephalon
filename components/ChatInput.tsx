@@ -2,11 +2,13 @@
 import { inputs } from "@/descriptions/chatInputs";
 import { Message } from "@/types/Chat";
 import { PaperAirplaneIcon } from "@heroicons/react/24/solid";
+import { QuestionMarkCircleIcon } from "@heroicons/react/24/solid";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 import { useSession } from "next-auth/react";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { toast } from "react-hot-toast";
+import HelpModal from "./HelpModal";
 import ModelSelection from "./ModelSelection";
 import NumberInput from "./NumberInput";
 
@@ -31,24 +33,26 @@ function ChatInput({ chatId }: Props) {
   const [prompt, setPrompt] = useState("");
   const { data: session } = useSession();
   const queryClient = useQueryClient();
-  const [model, setModel] = useState("gpt-3.5-turbo");
+  const [model, setModel] = useState("text-davinci-003");
+  const [helpModal, setHelpModal] = useState(false);
+  let toastID: string;
   const [parameters, setParameters] = useState({
-    temperature: 0.5,
+    temperature: 1,
     topP: 1,
     frequencyPenalty: 0,
     presencePenalty: 0,
   });
+
   const { mutate } = useMutation(
     async (message: Message) =>
       await axios.post("/api/message/addMessage", message),
     {
       onSuccess: (data: any) => {
         queryClient.invalidateQueries(["messages"]);
-        setPrompt("");
       },
       onError: (error) => {
         if (error instanceof AxiosError) {
-          toast.error(error?.response?.data.message);
+          toast.error(error?.response?.data.message, { id: toastID });
         }
       },
     }
@@ -59,15 +63,16 @@ function ChatInput({ chatId }: Props) {
     {
       onSuccess: (data: any) => {
         queryClient.invalidateQueries(["messages"]);
-        setPrompt("");
+        toast.success("ChatGPT has responded", { id: toastID });
       },
       onError: (error) => {
         if (error instanceof AxiosError) {
-          toast.error(error?.response?.data.message);
+          toast.error(error?.response?.data.message, { id: toastID });
         }
       },
     }
   );
+
   const sendMessage = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!prompt) return;
@@ -75,8 +80,10 @@ function ChatInput({ chatId }: Props) {
     const myMessage: Message = {
       text: input,
       author: session?.user?.email!,
+      avatar: session?.user?.image,
       chatId: chatId,
     };
+
     const chatMessage: updatedMessage = {
       text: input,
       author: session?.user?.email!,
@@ -87,25 +94,33 @@ function ChatInput({ chatId }: Props) {
       presencePenalty: parameters.presencePenalty,
       model,
     };
-    toast.loading("ChatGPT is thinking...");
+    toastID = toast.loading("ChatGPT is thinking...", { id: toastID });
     mutate(myMessage);
     sendToChat(chatMessage);
+    setPrompt("");
   };
   const handleParameters = (e: ChangeEvent<HTMLInputElement>) =>
     setParameters({ ...parameters, [e.target.name]: e.target.value });
 
   return (
     <div className="bg-gray-700/50 text-gray-400 rounded-lg text-sm">
+      {helpModal && <HelpModal setHelpModal={setHelpModal} />}
       <div>
         <ModelSelection model={model} setModel={setModel} />
-        {inputs.map((input) => (
-          <NumberInput
-            key={input.id}
-            {...input}
-            handleParameters={handleParameters}
-            parameters={parameters}
+        <div className="flex flex-col justify-between items-center p-3 md:flex-row ">
+          {inputs.map((input) => (
+            <NumberInput
+              key={input.id}
+              {...input}
+              handleParameters={handleParameters}
+              parameters={parameters}
+            />
+          ))}
+          <QuestionMarkCircleIcon
+            className="h-8 w-8 cursor-pointer"
+            onClick={() => setHelpModal(true)}
           />
-        ))}
+        </div>
       </div>
       <form onSubmit={sendMessage} className="p-5 space-x-5 flex">
         <input

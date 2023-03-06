@@ -21,7 +21,10 @@ module.exports = {
         mainBoxy: "-10px 10px 0px 3px #53ABB3",
         darkBoxy: "-10px 10px 0px 3px #2C404D",
       },
+      fontFamily: {
+        montserrat: ["var(--font-montserrat)"],
+      },
     },
   },
-  plugins: [],
+  plugins: [require("daisyui")],
 };

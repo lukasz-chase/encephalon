@@ -1,17 +1,16 @@
 export type Session = {
   user: {
-    name: String;
-    email: String;
-    image: String;
-    id: String;
+    name: string;
+    email: string;
+    image: string;
+    id: string;
   };
-  expires: String;
+  expires: string;
 };
 
 export type User = {
-  id: String;
-  name: String;
-  email: String;
-  emailVerified: null;
-  image: String;
+  id: string;
+  name: string;
+  email: string;
+  image: string;
 };

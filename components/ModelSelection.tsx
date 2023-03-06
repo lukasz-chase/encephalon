@@ -2,18 +2,16 @@
 import { Dispatch, SetStateAction } from "react";
 import Select from "react-select";
 
-const options = [
-  { value: "gpt-3.5-turbo", label: "gpt-3.5-turbo" },
-  { value: "gpt-3.5-turbo-0301", label: "gpt-3.5-turbo-0301" },
-  { value: "text-davinci-003", label: "text-davinci-003" },
-  { value: "text-davinci-002", label: "text-davinci-002" },
-  { value: "code-davinci-002", label: "code-davinci-002" },
-];
-
 type ModelSelectionTypes = {
   model: string;
   setModel: Dispatch<SetStateAction<string>>;
 };
+
+const models = [
+  { value: "text-davinci-003", label: "text-davinci-003" },
+  { value: "text-davinci-002", label: "text-davinci-002" },
+  { value: "code-davinci-002", label: "code-davinci-002" },
+];
 
 const ModelSelection = ({ model, setModel }: ModelSelectionTypes) => {
   return (
@@ -25,8 +23,8 @@ const ModelSelection = ({ model, setModel }: ModelSelectionTypes) => {
         menuPosition="fixed"
         classNames={{ control: (state) => "bg-[#434654] border-[#434654]" }}
         placeholder={model}
-        onChange={(e) => setModel(e.value)}
-        options={options}
+        onChange={(e) => setModel(e?.value)}
+        options={models}
       />
     </div>
   );

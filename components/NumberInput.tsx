@@ -26,9 +26,10 @@ const NumberInput = ({
   parameters,
 }: NumberInputTypes) => {
   return (
-    <div>
+    <div className="flex flex-col items-center">
       <label htmlFor={id}>{label}</label>
       <input
+        className="text-white text-center rounded-lg bg-[#434654]"
         id={id}
         type="number"
         name={name}

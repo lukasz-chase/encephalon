@@ -3,7 +3,7 @@ import { fetchMessages } from "@/api";
 import { Message as MessageType } from "@/types/Chat";
 import { ArrowDownCircleIcon } from "@heroicons/react/24/outline";
 import { useQuery } from "@tanstack/react-query";
-import { useSession } from "next-auth/react";
+import { useEffect, useRef } from "react";
 import Message from "./Message";
 
 type Props = {
@@ -11,14 +11,23 @@ type Props = {
 };
 
 function Chat({ chatId }: Props) {
-  const { data: session } = useSession();
   const { data: messages, isLoading } = useQuery<MessageType[]>({
     queryFn: () => fetchMessages(chatId),
     queryKey: ["messages"],
   });
-  console.log(messages);
+  const containerRef = useRef(null);
+  const messagesEndRef = useRef(null);
+  const scrollToBottom = () => {
+    messagesEndRef.current!.scrollIntoView({ behavior: "smooth" });
+  };
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
   return (
-    <div className="flex-1 overflow-y-auto overflow-x-hidden">
+    <div
+      className="flex-1 overflow-y-auto overflow-x-hidden"
+      ref={containerRef}
+    >
       {messages?.length === 0 && (
         <>
           <p className="mt-10 text-center text-white">
@@ -30,6 +39,7 @@ function Chat({ chatId }: Props) {
       {messages?.map((message) => (
         <Message key={message.id} {...message} />
       ))}
+      <div ref={messagesEndRef} />
     </div>
   );
 }

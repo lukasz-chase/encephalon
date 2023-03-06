@@ -2,10 +2,12 @@
 import { fetchMessages } from "@/api";
 import { Message } from "@/types/Chat";
 import { ChatBubbleLeftIcon, TrashIcon } from "@heroicons/react/24/outline";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
 
 type Props = {
   id: string;
@@ -15,20 +17,40 @@ function ChatRow({ id }: Props) {
   const pathname = usePathname();
   const router = useRouter();
   const [active, setActive] = useState(false);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const queryClient = useQueryClient();
+  let deleteChatId: string;
 
   useEffect(() => {
     if (!pathname) return;
     setActive(pathname.includes(id));
   }, [pathname, id]);
 
+  useEffect(() => {
+    fetchMessages(id).then((data) => setMessages(data));
+  }, [id]);
+
+  const { mutate } = useMutation(
+    async (id: string) =>
+      await axios.delete(`/api/chat/removeChat`, { data: id }),
+
+    {
+      onSuccess: (data: any) => {
+        toast.success("deleted a chat", { id: deleteChatId });
+        queryClient.invalidateQueries(["chats"]);
+      },
+      onError: (error) => {
+        toast.error("error while deleting a chat", { id: deleteChatId });
+      },
+    }
+  );
+
   const removeChat = async () => {
+    deleteChatId = toast.loading("deleting a chat", { id: deleteChatId });
+    mutate(id);
     router.replace("/");
   };
 
-  const { data: messages, isLoading } = useQuery<Message[]>({
-    queryFn: () => fetchMessages(id),
-    queryKey: ["message"],
-  });
   return (
     <Link
       href={`/chat/${id}`}
