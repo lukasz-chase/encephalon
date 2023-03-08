@@ -14,7 +14,7 @@ function SideBar() {
     queryFn: () => fetchChats(session?.user.id),
     queryKey: ["chats"],
   });
-  console.log(chats);
+
   return (
     <div className="p-2 flex-col h-full">
       <div className="flex-1">

@@ -28,7 +28,6 @@ export default async function handler(
     });
     res.status(200).json(result);
   } catch (err: any) {
-    console.log(err);
     res.status(403).json({ err: "error when creating a image" });
   }
 }

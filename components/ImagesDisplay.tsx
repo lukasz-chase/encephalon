@@ -10,7 +10,7 @@ const ImagesDisplay = ({ id }: { id?: string }) => {
     queryFn: () => fetchImage(id),
     queryKey: ["images"],
   });
-  console.log(images);
+
   if (isLoading) return <Loading />;
   return (
     <div className="mt-10 h-screen">

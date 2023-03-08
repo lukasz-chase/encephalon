@@ -16,7 +16,7 @@ export default async function handler(
     const prismaUser = await prisma.user.findUnique({
       where: { email: session?.user?.email! },
     });
-    console.log(prismaUser);
+
     try {
       const result = await prisma.chat.create({
         data: {
