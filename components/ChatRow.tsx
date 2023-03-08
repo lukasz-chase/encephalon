@@ -2,7 +2,7 @@
 import { fetchMessages } from "@/api";
 import { Message } from "@/types/Chat";
 import { ChatBubbleLeftIcon, TrashIcon } from "@heroicons/react/24/outline";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -60,7 +60,7 @@ function ChatRow({ id }: Props) {
     >
       <ChatBubbleLeftIcon className="h-5 w-5" />
       <p className="flex-1 hidden md:inline-flex truncate">
-        {messages ? messages[messages.length - 1]?.text : "New Chat"}
+        {messages.length > 0 ? messages[messages.length - 1]?.text : "New Chat"}
       </p>
       <TrashIcon
         onClick={removeChat}

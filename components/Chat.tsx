@@ -4,6 +4,7 @@ import { Message as MessageType } from "@/types/Chat";
 import { ArrowDownCircleIcon } from "@heroicons/react/24/outline";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
+import Loading from "./Loading";
 import Message from "./Message";
 
 type Props = {
@@ -18,11 +19,14 @@ function Chat({ chatId }: Props) {
   const containerRef = useRef(null);
   const messagesEndRef = useRef(null);
   const scrollToBottom = () => {
-    messagesEndRef.current!.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  if (messages?.length > 0 && messages[0].chatId !== chatId) return <Loading />;
+  if (isLoading) return <Loading />;
   return (
     <div
       className="flex-1 overflow-y-auto overflow-x-hidden"

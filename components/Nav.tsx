@@ -6,8 +6,8 @@ import Link from "next/link";
 const Nav = () => {
   const { data: session } = useSession();
   return (
-    <div className="flex justify-between items-center px-5 md:px-10 py-3 text-black uppercase border-b-2 border-dark-accent font-bold text-xs md:text-md ">
-      <h1>Encephalon</h1>
+    <div className="flex justify-between items-center px-5 md:px-10 py-3 text-black bg-white uppercase border-b-2 border-dark-accent font-bold text-xs md:text-md ">
+      <Link href="/">Encephalon</Link>
       <ul className="flex flex-row gap-2 md:gap-5 items-center justify-center">
         <li>
           <Link href="/chat">ChatGPT</Link>
