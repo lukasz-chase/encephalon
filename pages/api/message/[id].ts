@@ -9,9 +9,12 @@ export default async function handler(
 ) {
   if (req.method === "GET") {
     try {
+      const chatId = Array.isArray(req.query.id)
+        ? { in: req.query.id }
+        : req.query.id;
       const data = await prisma.message.findMany({
         where: {
-          chatId: req.query.id,
+          chatId: chatId,
         },
         orderBy: {
           createdAt: "asc",

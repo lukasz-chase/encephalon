@@ -7,10 +7,13 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method === "GET") {
+    const id = Array.isArray(req.query.id)
+      ? { in: req.query.id }
+      : req.query.id;
     try {
       const data = await prisma.generatedImage.findUnique({
         where: {
-          id: req.query.id,
+          id: id,
         },
       });
       res.status(200).json(data);

@@ -7,10 +7,13 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method === "GET") {
+    const userId = Array.isArray(req.query.id)
+      ? { in: req.query.id }
+      : req.query.id;
     try {
       const data = await prisma.chat.findMany({
         where: {
-          userId: req.query.id,
+          userId: userId,
         },
         orderBy: {
           createdAt: "desc",
