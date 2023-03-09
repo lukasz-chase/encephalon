@@ -17,7 +17,7 @@ export default async function handler(
   const response: [{ url: string }] = await query({
     prompt,
   });
-  const links = response.map((obj) => obj.url.match(/https?:\/\/[^\s]+/)[0]);
+  const links = response.map((obj) => obj.url.match(/https?:\/\/[^\s]+/)![0]);
   try {
     const result = await prisma.generatedImage.create({
       data: {
