@@ -6,6 +6,7 @@ import { Session, User } from "@/types/authTypes";
 
 export const AuthOptions: any = {
   adapter: PrismaAdapter(prisma),
+  secret: process.env.AUTH_SECRET,
   providers: [
     GithubProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
