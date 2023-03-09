@@ -3,7 +3,6 @@ import { fetchImage } from "@/api";
 import { generateImage } from "@/types/Image";
 import { generatedImage } from "@prisma/client";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import axios, { AxiosError } from "axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
@@ -12,7 +11,7 @@ import { toast } from "react-hot-toast";
 const ImageInput = ({ id }: { id?: string }) => {
   const [prompt, setPrompt] = useState<string>("");
   const { data: image } = useQuery<generatedImage>({
-    queryFn: () => fetchImage(id),
+    queryFn: () => fetchImage(id!),
     queryKey: ["image"],
   });
   useEffect(() => {
@@ -25,14 +24,17 @@ const ImageInput = ({ id }: { id?: string }) => {
   let toastId: string;
   const { mutate } = useMutation(
     async (image: generateImage) =>
-      await axios.post("/api/image/createImage", image),
+      await fetch("/api/image/createImage", {
+        method: "POST",
+        body: JSON.stringify(image),
+      }),
     {
       onSuccess: (data: any) => {
         toast.success("Dalle has responded", { id: toastId });
         router.replace(`/dalle/${data.data.id}`);
       },
-      onError: (error) => {
-        if (error instanceof AxiosError) {
+      onError: (error: any) => {
+        if (error) {
           toast.error(error?.response?.data.message, { id: toastId });
         }
       },

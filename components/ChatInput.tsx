@@ -4,7 +4,6 @@ import { Message } from "@/types/Chat";
 import { PaperAirplaneIcon } from "@heroicons/react/24/solid";
 import { QuestionMarkCircleIcon } from "@heroicons/react/24/solid";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import axios, { AxiosError } from "axios";
 import { useSession } from "next-auth/react";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { toast } from "react-hot-toast";
@@ -45,13 +44,16 @@ function ChatInput({ chatId }: Props) {
 
   const { mutate } = useMutation(
     async (message: Message) =>
-      await axios.post("/api/message/addMessage", message),
+      await fetch("/api/message/addMessage", {
+        method: "POST",
+        body: JSON.stringify(message),
+      }),
     {
       onSuccess: (data: any) => {
         queryClient.invalidateQueries(["messages"]);
       },
-      onError: (error) => {
-        if (error instanceof AxiosError) {
+      onError: (error: any) => {
+        if (error) {
           toast.error(error?.response?.data.message, { id: toastID });
         }
       },
@@ -59,14 +61,17 @@ function ChatInput({ chatId }: Props) {
   );
   const { mutate: sendToChat } = useMutation(
     async (message: updatedMessage) =>
-      await axios.post("/api/message/askQuestion", message),
+      await fetch("/api/message/askQuestion", {
+        method: "POST",
+        body: JSON.stringify(message),
+      }),
     {
       onSuccess: (data: any) => {
         queryClient.invalidateQueries(["messages"]);
         toast.success("ChatGPT has responded", { id: toastID });
       },
-      onError: (error) => {
-        if (error instanceof AxiosError) {
+      onError: (error: any) => {
+        if (error) {
           toast.error(error?.response?.data.message, { id: toastID });
         }
       },

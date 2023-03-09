@@ -3,7 +3,6 @@ import { fetchMessages } from "@/api";
 import { Message } from "@/types/Chat";
 import { ChatBubbleLeftIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -32,10 +31,14 @@ function ChatRow({ id }: Props) {
 
   const { mutate } = useMutation(
     async (id: string) =>
-      await axios.delete(`/api/chat/removeChat`, { data: id }),
+      await fetch(`/api/chat/removeChat`, {
+        method: "DELETE",
+        body: JSON.stringify({ data: id }),
+      }),
 
     {
       onSuccess: (data: any) => {
+        console.log("asd");
         toast.success("deleted a chat", { id: deleteChatId });
         queryClient.invalidateQueries(["chats"]);
       },

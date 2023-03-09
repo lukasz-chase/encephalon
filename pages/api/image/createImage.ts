@@ -7,7 +7,9 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { prompt, userId }: { prompt: string; userId: string } = req.body;
+  const { prompt, userId }: { prompt: string; userId: string } = JSON.parse(
+    req.body
+  );
 
   if (!prompt) {
     res.status(400).json({ answer: "Please provide a text!" });

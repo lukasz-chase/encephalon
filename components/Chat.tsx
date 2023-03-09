@@ -17,7 +17,7 @@ function Chat({ chatId }: Props) {
     queryKey: ["messages"],
   });
   const containerRef = useRef(null);
-  const messagesEndRef = useRef(null);
+  const messagesEndRef = useRef<HTMLElement>(null);
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -25,7 +25,8 @@ function Chat({ chatId }: Props) {
     scrollToBottom();
   }, [messages]);
 
-  if (messages?.length > 0 && messages[0].chatId !== chatId) return <Loading />;
+  if (messages?.length! > 0 && messages![0].chatId !== chatId)
+    return <Loading />;
   if (isLoading) return <Loading />;
   return (
     <div
