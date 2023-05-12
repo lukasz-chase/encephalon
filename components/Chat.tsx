@@ -17,7 +17,7 @@ function Chat({ chatId }: Props) {
     queryKey: ["messages"],
   });
   const containerRef = useRef(null);
-  const messagesEndRef = useRef(null);
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -25,8 +25,9 @@ function Chat({ chatId }: Props) {
     scrollToBottom();
   }, [messages]);
 
-  if (messages?.length > 0 && messages[0].chatId !== chatId) return <Loading />;
   if (isLoading) return <Loading />;
+  if (messages!.length > 0 && messages![0].chatId !== chatId)
+    return <Loading />;
   return (
     <div
       className="flex-1 overflow-y-auto overflow-x-hidden"

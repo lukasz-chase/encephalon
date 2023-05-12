@@ -18,9 +18,9 @@ const query = async ({
   topP,
 }: queryTypes) => {
   const res = await openai
-    .createCompletion({
+    .createChatCompletion({
       model,
-      prompt,
+      messages: [{ role: "user", content: prompt }],
       temperature: temperature,
       max_tokens: 1000,
       top_p: topP,
@@ -30,10 +30,10 @@ const query = async ({
     .then((res: any) => {
       return res.data.choices[0].text;
     })
-    .catch(
-      (err: any) =>
-        `ChatGPT was unable to find an answer for that! (Error: ${err.message})`
-    );
+    .catch((err: any) => {
+      console.log(err.response);
+      return `ChatGPT was unable to find an answer for that! (Error: ${err.message})`;
+    });
 
   return res;
 };

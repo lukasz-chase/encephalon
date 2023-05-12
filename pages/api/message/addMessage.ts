@@ -38,7 +38,7 @@ export default async function handler(
       });
       res.status(200).json(result);
     } catch (err) {
-      res.status(403).json({ err: "error when creating a post" });
+      res.status(403).json({ err: "error when adding a message" });
     }
   }
 }

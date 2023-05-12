@@ -7,7 +7,7 @@ import Loading from "./Loading";
 
 const ImagesDisplay = ({ id }: { id?: string }) => {
   const { data: images, isLoading } = useQuery<generatedImage>({
-    queryFn: () => fetchImage(id),
+    queryFn: () => fetchImage(id!),
     queryKey: ["images"],
   });
 

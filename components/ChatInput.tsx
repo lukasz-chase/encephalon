@@ -7,7 +7,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 import { useSession } from "next-auth/react";
 import { ChangeEvent, FormEvent, useState } from "react";
-import { toast } from "react-hot-toast";
+import toast from "react-hot-toast";
 import HelpModal from "./HelpModal";
 import ModelSelection from "./ModelSelection";
 import NumberInput from "./NumberInput";
@@ -35,7 +35,7 @@ function ChatInput({ chatId }: Props) {
   const queryClient = useQueryClient();
   const [model, setModel] = useState("text-davinci-003");
   const [helpModal, setHelpModal] = useState(false);
-  let toastID: string;
+  let toastId: string;
   const [parameters, setParameters] = useState({
     temperature: 1,
     topP: 1,
@@ -52,7 +52,7 @@ function ChatInput({ chatId }: Props) {
       },
       onError: (error) => {
         if (error instanceof AxiosError) {
-          toast.error(error?.response?.data.message, { id: toastID });
+          toast.error(error?.response?.data.message, { id: toastId });
         }
       },
     }
@@ -63,11 +63,11 @@ function ChatInput({ chatId }: Props) {
     {
       onSuccess: (data: any) => {
         queryClient.invalidateQueries(["messages"]);
-        toast.success("ChatGPT has responded", { id: toastID });
+        toast.success("ChatGPT has responded", { id: toastId });
       },
       onError: (error) => {
         if (error instanceof AxiosError) {
-          toast.error(error?.response?.data.message, { id: toastID });
+          toast.error(error?.response?.data.message, { id: toastId });
         }
       },
     }
@@ -76,6 +76,7 @@ function ChatInput({ chatId }: Props) {
   const sendMessage = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!prompt) return;
+
     const input = prompt.trim();
     const myMessage: Message = {
       text: input,
@@ -94,10 +95,10 @@ function ChatInput({ chatId }: Props) {
       presencePenalty: parameters.presencePenalty,
       model,
     };
-    toastID = toast.loading("ChatGPT is thinking...", { id: toastID });
-    mutate(myMessage);
     sendToChat(chatMessage);
+
     setPrompt("");
+    mutate(myMessage);
   };
   const handleParameters = (e: ChangeEvent<HTMLInputElement>) =>
     setParameters({ ...parameters, [e.target.name]: e.target.value });
