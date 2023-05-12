@@ -18,12 +18,12 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session: any = await getServerSession(AuthOptions);
+  // const session: any = await getServerSession(AuthOptions);
   return (
     <html lang="en">
       <head />
       <body>
-        <SessionProvider session={session}>
+        <SessionProvider>
           <QueryWrapper>
             <div
               className={`flex flex-col ${montserrat.variable} h-screen font-montserrat`}

@@ -3,17 +3,17 @@
 import { PlusIcon } from "@heroicons/react/24/solid";
 import { useRouter } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
 
 function NewChat() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { mutate } = useMutation(
-    async () => await axios.post("/api/chat/addChat"),
+    async () =>
+      await (await fetch("/api/chat/addChat", { method: "POST" })).json(),
     {
       onSuccess: (data: any) => {
         queryClient.invalidateQueries(["chats"]);
-        router.push(`/chat/${data.data.id}`);
+        router.push(`/chat/${data.id}`);
       },
     }
   );

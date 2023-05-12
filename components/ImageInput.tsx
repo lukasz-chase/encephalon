@@ -1,9 +1,8 @@
 "use client";
-import { fetchImage, postImage } from "@/api";
+import { fetchImage } from "@/api";
 import { generateImage } from "@/types/Image";
 import { generatedImage } from "@prisma/client";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { AxiosError } from "axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
@@ -24,14 +23,18 @@ const ImageInput = ({ id }: { id?: string }) => {
   const router = useRouter();
   let toastId: string;
   const { mutate } = useMutation(
-    async (image: generateImage) => postImage(image),
+    async (image: generateImage) =>
+      await fetch("/api/image/createImage", {
+        method: "POST",
+        body: JSON.stringify(image),
+      }),
     {
       onSuccess: (data: any) => {
         toast.success("Dalle has responded", { id: toastId });
         router.replace(`/dalle/${data.data.id}`);
       },
-      onError: (error) => {
-        if (error instanceof AxiosError) {
+      onError: (error: any) => {
+        if (error) {
           toast.error(error?.response?.data.message, { id: toastId });
         }
       },

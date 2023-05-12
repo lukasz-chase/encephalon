@@ -36,7 +36,7 @@ const NumberInput = ({
         max={max}
         min={min}
         step="0.1"
-        value={parameters[name]}
+        value={parameters[name as keyof typeof parameters]}
         onChange={handleParameters}
       />
     </div>
