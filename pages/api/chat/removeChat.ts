@@ -13,7 +13,7 @@ export default async function handler(
     if (!session)
       return res.status(401).json({ message: "You need to be logged in" });
 
-    const { data: chatId } = JSON.parse(req.body);
+    const chatId = req.body;
 
     try {
       await prisma.message.deleteMany({

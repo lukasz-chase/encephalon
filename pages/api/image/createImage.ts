@@ -7,9 +7,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { prompt, userId }: { prompt: string; userId: string } = JSON.parse(
-    req.body
-  );
+  const { prompt, userId }: { prompt: string; userId: string } = req.body;
 
   if (!prompt) {
     res.status(400).json({ answer: "Please provide a text!" });
@@ -20,6 +18,7 @@ export default async function handler(
     prompt,
   });
   const links = response.map((obj) => obj.url.match(/https?:\/\/[^\s]+/)![0]);
+
   try {
     const result = await prisma.generatedImage.create({
       data: {
@@ -28,6 +27,7 @@ export default async function handler(
         imageLinks: links,
       },
     });
+
     res.status(200).json(result);
   } catch (err: any) {
     res.status(403).json({ err: "error when creating a image" });

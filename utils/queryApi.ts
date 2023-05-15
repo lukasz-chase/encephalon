@@ -18,9 +18,9 @@ const query = async ({
   topP,
 }: queryTypes) => {
   const res = await openai
-    .createChatCompletion({
+    .createCompletion({
       model,
-      messages: [{ role: "user", content: prompt }],
+      prompt,
       temperature: temperature,
       max_tokens: 1000,
       top_p: topP,

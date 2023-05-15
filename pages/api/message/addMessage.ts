@@ -20,7 +20,7 @@ export default async function handler(
     if (!session)
       return res.status(401).json({ message: "You need to be logged in" });
 
-    const { text, author, chatId, avatar }: bodyProps = JSON.parse(req.body);
+    const { text, author, chatId, avatar }: bodyProps = req.body;
 
     if (!text.length)
       return res

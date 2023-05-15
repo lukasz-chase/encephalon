@@ -15,7 +15,7 @@ export default async function handler(
     frequencyPenalty,
     presencePenalty,
     topP,
-  } = JSON.parse(req.body);
+  } = req.body;
 
   if (!text) {
     res.status(400).json({ answer: "Please provide a text!" });

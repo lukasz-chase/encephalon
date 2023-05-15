@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 import HelpModal from "./HelpModal";
 import ModelSelection from "./ModelSelection";
 import NumberInput from "./NumberInput";
+import axios from "axios";
 
 type Props = {
   chatId: string;
@@ -44,10 +45,7 @@ function ChatInput({ chatId }: Props) {
 
   const { mutate } = useMutation(
     async (message: Message) =>
-      await fetch("/api/message/addMessage", {
-        method: "POST",
-        body: JSON.stringify(message),
-      }),
+      await axios.post("/api/message/addMessage", message),
     {
       onSuccess: (data: any) => {
         queryClient.invalidateQueries(["messages"]);
@@ -61,10 +59,7 @@ function ChatInput({ chatId }: Props) {
   );
   const { mutate: sendToChat } = useMutation(
     async (message: updatedMessage) =>
-      await fetch("/api/message/askQuestion", {
-        method: "POST",
-        body: JSON.stringify(message),
-      }),
+      await axios.post("/api/message/askQuestion", message),
     {
       onSuccess: (data: any) => {
         queryClient.invalidateQueries(["messages"]);

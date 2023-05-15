@@ -14,9 +14,10 @@ const query = async ({ prompt }: queryTypes) => {
     .then((res: any) => {
       return res.data.data;
     })
-    .catch(
-      (err: any) => `Error when creating an image (Error: ${err.message})`
-    );
+    .catch((err: any) => {
+      console.log(err);
+      return `Error when creating an image (Error: ${err.message})`;
+    });
 
   return res;
 };

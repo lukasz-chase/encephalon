@@ -1,9 +1,6 @@
 import { SessionProvider } from "@/components/SessionProvider";
 import "./globals.css";
-import { getServerSession } from "next-auth/next";
-
 import QueryWrapper from "@/components/QueryWrapper";
-import { AuthOptions } from "@/pages/api/auth/[...nextauth]";
 import Nav from "@/components/Nav";
 import { Montserrat } from "next/font/google";
 
